@@ -37,7 +37,7 @@
         // Destructor > called when object is destroyed
         ~Employee()
         {
-            Console.WriteLine($"Employee object destroyed => {EmployeeId}: {FirstName} {LastName} ");
+            Console.WriteLine($"=> Employee object {EmployeeId} - {FirstName} {LastName} destroyed ");
             TotalEmployees--;
         }
 
@@ -92,18 +92,8 @@
             }
         }
 
-        // Method to calculate and display total salary of all employees
-        public void DisplayTotalSalary()
-        {
-            double totalSalary = 0;
-            foreach (var employee in employees)
-            {
-                totalSalary += employee.Salary;
-            }
-            Console.WriteLine($"Total Salary of all employees: {totalSalary}");
-        }
 
-        public void DisplayDepartments()
+        public void DisplayDepartments() // Display all departments
         {
             // Get all values of the Department enum
             Department[] departments = (Department[])Enum.GetValues(typeof(Department));
@@ -149,13 +139,13 @@
     {
     static void Main(string[] args)
         {
-            // Creating instances of EmployeeManager
+            // Creating instances of EmployeeManager and Department
             EmployeeManager employeeManager = new EmployeeManager();
             Department department;
 
             string action;
             
-            do
+            do // Loop to display menu until user exits
             {
                 Console.WriteLine("\n---------------------------------------\n Welcome to the Employee Management System!\n What would you like to do?\n---------------------------------------");
                 Console.WriteLine("[1] Add employee\n[2] Remove Employee\n[3] Display All Employees\n[4] Assign Employee to a Department\n[5] Exit\n");
@@ -181,7 +171,6 @@
                         break;
 
                     case "2":
-                        //Console.WriteLine("Removing employee...\n");
                         string input2;
 
                         do
@@ -222,7 +211,7 @@
                         break;
                 }
             }
-            while (action != "5");
+            while (action != "5"); // Exit the loop when user enters '5'
 
             
 
@@ -311,8 +300,9 @@
                         if (employeeManager.EmployeeIdExists(employeeId)) // Check if employee ID does exist
                         {
                             employeeManager.RemoveEmployee(employeeId);
-                            Console.WriteLine("\nEmployee removed successfully.");
-                            //employeeManager.DisplayAllEmployees();
+                            GC.Collect(); // Calling garbage collector to dispose objects;
+                            Console.WriteLine("\nPress any key to continue");
+                            Console.ReadLine();
                             break;
                         }
                         else
@@ -404,20 +394,6 @@
                   
             }
 
-
-            if (employeeManager.NoEmployees())
-            {
-                Console.WriteLine("There are no employees.");
-            }
-            else
-            {
-                // Perform actions for when there are employees
-                employeeManager.DisplayAllEmployees();
-            }
-
-
-
-            GC.Collect(); // Calling garbage collector to dispose objects
         }
     }
 }
